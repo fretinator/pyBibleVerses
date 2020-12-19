@@ -16,7 +16,8 @@ SCREEN_ROWS = 6
 SCREEN_COLS=30
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 400
-
+BORDER_PADDING = 5
+BORDER_COLOR="green"
 BIBLE_FONT_SIZE=32 
 TIME_SECOND = 1000 # 1000 ms = 1 s
 TRUNC_CHARS = "..."
@@ -47,7 +48,6 @@ def initMe():
 
     topPadding.width = app.width
     bottomPadding.width = app.width
-
     app.after(20, displayVerse)
 
 def getBibleFontSize():
@@ -304,35 +304,37 @@ app = App(title="pyBibleVerses", layout="grid",
 #Add Widgets
 
 # 1. Add row of controls for traversal, etc
-myBox = Box(app, align='left', grid=[0,0], layout="grid")
+controlBox = Box(app, align='left', grid=[0,0], layout="grid")
+
+
 
 # Add control buttons
-rewindButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_REWIND,
+rewindButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_REWIND,
                         grid=[0,0], command=rewind)
-prevButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_PREV,
+prevButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_PREV,
                         grid=[1,0], command=prev)
-pauseButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_PAUSE,
+pauseButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_PAUSE,
                         grid=[2,0], command=pausePlay)
-nextButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_NEXT,
+nextButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_NEXT,
                         grid=[3,0], command=goNext)
-ffButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_FAST_FORWARD,
+ffButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_FAST_FORWARD,
                         grid=[4,0], command=fastForward)
-quitButton = PushButton(myBox, width=ICON_WIDTH, image=ICON_EXIT,
+quitButton = PushButton(controlBox, width=ICON_WIDTH, image=ICON_EXIT,
                         grid=[5,0],
                         command=doQuit)
 
 # add some padding
-pad1 = Text(myBox, text="  ", grid=[6,0])
+pad1 = Text(controlBox, text="  ", grid=[6,0])
 
-slowerButton = PushButton(myBox, text="Slower",grid=[7,0],
+slowerButton = PushButton(controlBox, text="Slower",grid=[7,0],
                           command=goSlower)
-fasterButton = PushButton(myBox, text="Faster",grid=[8,0],
+fasterButton = PushButton(controlBox, text="Faster",grid=[8,0],
                           command=goFaster)
 # more padding
-pad2 = Text(myBox, text="  ", grid=[9,0])
+pad2 = Text(controlBox, text="  ", grid=[9,0])
 
 # Show what verse is next
-txtNextVerse = Text(myBox, size =16, text="Next Verse", 
+txtNextVerse = Text(controlBox, size =16, text="Next Verse", 
 	color="white", width="fill", align="left",
 	grid=[10,0])
 
@@ -344,7 +346,6 @@ ffButton.bg=ICON_BG
 quitButton.bg=ICON_BG
 slowerButton.text_color = "white"
 fasterButton.text_color = "white"
-
 
 
 # 2. Now add text area to display verse
@@ -362,8 +363,12 @@ txtEmpty2 = Text(app, text=spaceString,align="left",
               grid=[0,3], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
+contentBox = Box(app, grid=[0,4],layout="grid", width=app.width)
+#contentBox.set_border(BORDER_PADDING,BORDER_COLOR)
+
+
 for txtNum in range(SCREEN_ROWS):
-    textItems['txt' + str(txtNum)] = Text(app, text=str(txtNum), align="left", grid=[0,4 + txtNum],
+    textItems['txt' + str(txtNum)] = Text(contentBox, text=str(txtNum), align="left", grid=[0,txtNum],
             font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 
 
@@ -372,10 +377,10 @@ for txtNum in range(SCREEN_ROWS):
 #              size=BIBLE_FONT_SIZE, color="white")
 
 txtEmpty3 = Text(app, text=spaceString,align="left",
-              grid=[0,4 + SCREEN_ROWS], font="Courier", width="fill",
+              grid=[0,5], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
-bottomPadding = Drawing(app,height=20,width=app.width,grid=[0,5 + SCREEN_ROWS])
+bottomPadding = Drawing(app,height=20,width=app.width,grid=[0,6])
 
 topPadding.bg = "blue"
 bottomPadding.bg = "blue"
