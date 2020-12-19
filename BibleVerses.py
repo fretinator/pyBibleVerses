@@ -1,4 +1,4 @@
-from guizero import App,Text,PushButton,Box
+from guizero import App,Text,PushButton,Box,Drawing
 import time
 import tkinter
 
@@ -13,7 +13,7 @@ ICON_REWIND = './rewind.png'
 ICON_WIDTH = 48
 ICON_BG="white"
 SCREEN_ROWS = 6
-SCREEN_COLS=28
+SCREEN_COLS=30
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 400
 
@@ -34,6 +34,8 @@ verses = []
 app = App
 app = App
 versesDelay = 8 * TIME_SECOND
+topPadding = Drawing
+bottomPadding = Drawing
 
 def initMe():
     global textItems,app
@@ -43,8 +45,8 @@ def initMe():
     for txtNum in range(SCREEN_ROWS):
         textItems['txt' + str(txtNum)].text_size = newFontSize
 
-    txtTop.text_size = newFontSize
-    txtBottom.text_size = newFontSize
+    topPadding.width = app.width
+    bottomPadding.width = app.width
 
     app.after(20, displayVerse)
 
@@ -346,22 +348,37 @@ fasterButton.text_color = "white"
 
 
 # 2. Now add text area to display verse
-txtEmpty = Text(app, text=spaceString,align="left",
+txtEmpty1 = Text(app, text=spaceString,align="left",
               grid=[0,1], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
-txtTop = Text(app, text=appendString,align="left",
-              grid=[0,2], font="Courier", width="fill",
+#txtTop = Text(app, text=appendString,align="left",
+#              grid=[0,2], font="Courier", width="fill",
+#              size=BIBLE_FONT_SIZE, color="white")
+
+topPadding = Drawing(app,height=20,width=app.width,grid=[0,2])
+
+txtEmpty2 = Text(app, text=spaceString,align="left",
+              grid=[0,3], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
 for txtNum in range(SCREEN_ROWS):
-    textItems['txt' + str(txtNum)] = Text(app, text=str(txtNum), align="left", grid=[0,3 + txtNum],
+    textItems['txt' + str(txtNum)] = Text(app, text=str(txtNum), align="left", grid=[0,4 + txtNum],
             font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 
 
-txtBottom = Text(app, text=appendString,align="left",
-              grid=[0,3 + SCREEN_ROWS], font="Courier", width="fill",
+#txtBottom = Text(app, text=appendString,align="left",
+#              grid=[0,3 + SCREEN_ROWS], font="Courier", width="fill",
+#              size=BIBLE_FONT_SIZE, color="white")
+
+txtEmpty3 = Text(app, text=spaceString,align="left",
+              grid=[0,4 + SCREEN_ROWS], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
+
+bottomPadding = Drawing(app,height=20,width=app.width,grid=[0,5 + SCREEN_ROWS])
+
+topPadding.bg = "blue"
+bottomPadding.bg = "blue"
 
 app.full_screen=True
 
