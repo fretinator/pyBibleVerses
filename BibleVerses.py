@@ -13,12 +13,15 @@ ICON_REWIND = './rewind.png'
 ICON_WIDTH = 48
 ICON_BG="white"
 SCREEN_ROWS = 6
-SCREEN_COLS = 28
+SCREEN_COLS=28
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 400
+
 BIBLE_FONT_SIZE=32 
 TIME_SECOND = 1000 # 1000 ms = 1 s
 TRUNC_CHARS = "..."
-APPEND_STRING = '*' * SCREEN_COLS
-SPACE_STRING = ' ' * SCREEN_COLS
+appendString = '*' * SCREEN_COLS
+spaceString = ' ' * SCREEN_COLS
 REWIND_FF_AMOUNT = 20 #verses to skip
 paused = False
 textItems = {str:Text}
@@ -31,6 +34,29 @@ verses = []
 app = App
 app = App
 versesDelay = 8 * TIME_SECOND
+
+def initMe():
+    global textItems,app
+
+    newFontSize = getBibleFontSize()
+
+    for txtNum in range(SCREEN_ROWS):
+        textItems['txt' + str(txtNum)].text_size = newFontSize
+
+    txtTop.text_size = newFontSize
+    txtBottom.text_size = newFontSize
+
+    app.after(20, displayVerse)
+
+def getBibleFontSize():
+    global app
+
+    return int(BIBLE_FONT_SIZE * (app.width / SCREEN_WIDTH))
+
+def getScreenCols():
+    global SCREEN_COLS
+
+    return SCREEN_COLS
 
 def goFaster():
     global TIME_SECOND, versesDelay
@@ -49,7 +75,7 @@ def initChunkValues():
     startPos = 0
     curLine = 1
     lastPos = 0
-    moreChunks= True
+    moreChunks = True
     
 def prev():
     global curVerse,paused
@@ -320,11 +346,11 @@ fasterButton.text_color = "white"
 
 
 # 2. Now add text area to display verse
-txtEmpty = Text(app, text=SPACE_STRING,align="left",
+txtEmpty = Text(app, text=spaceString,align="left",
               grid=[0,1], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
-txtTop = Text(app, text=APPEND_STRING,align="left",
+txtTop = Text(app, text=appendString,align="left",
               grid=[0,2], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
@@ -333,13 +359,13 @@ for txtNum in range(SCREEN_ROWS):
             font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 
 
-txtBottom = Text(app, text=APPEND_STRING,align="left",
+txtBottom = Text(app, text=appendString,align="left",
               grid=[0,3 + SCREEN_ROWS], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
 app.full_screen=True
 
-pauseButton.after(20, displayVerse)
-
+#pauseButton.after(20, displayVerse)
+app.after(20, initMe)
 
 app.display()
