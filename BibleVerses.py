@@ -21,7 +21,7 @@ APPEND_STRING = '*' * SCREEN_COLS
 SPACE_STRING = ' ' * SCREEN_COLS
 REWIND_FF_AMOUNT = 20 #verses to skip
 paused = False
-textArray = [Text]
+textItems = {str:Text}
 curVerse = 0
 startPos = 0
 curLine = 1
@@ -29,12 +29,6 @@ lastPos = 0
 moreChunks = True
 verses = []
 app = App
-txt1 = Text
-txt2 = Text
-txt3 = Text
-txt4 = Text
-txt5 = Text
-txt6 = Text
 app = App
 versesDelay = 8 * TIME_SECOND
 
@@ -156,18 +150,15 @@ def pausePlay():
         
 def loadBible():
     # Using readlines() 
-    file1 = open(bible_file, 'r') 
+    file1 = open(bible_file,'r',encoding="utf-8",errors="ignore") 
     return file1.readlines()          
 
 def resetScreen():
     global txt1,txt2,txt3,txt4
  
-    txt1.value = '' 
-    txt2.value = ''
-    txt3.value = ''
-    txt4.value = ''
-    txt5.value = ''
-    txt6.value = ''
+    for txtNum in range(SCREEN_ROWS):
+        textItems['txt' + str(txtNum)].value = ''
+
     
 def printScreen(line, reset):
     global txt1,txt2,txt3,txt4,txt5,txt6 
@@ -179,27 +170,9 @@ def printScreen(line, reset):
     
     if reset:
         resetScreen()
-    
-    if curLine == 1:
-        txt1.value = line
-    
-    
-    if curLine == 2:
-        txt2.value = line
-   
-    
-    if curLine == 3:
-        txt3.value = line
 
-    
-    if curLine == 4:
-        txt4.value = line
+    textItems['txt' + str(curLine - 1)].value = line    
 
-    if curLine == 5:
-        txt5.value = line
-    
-    if curLine == 6:
-        txt6.value = line
     
 def getNextChunkPos(verse, max_chars, truncate):
     global lastPos
@@ -297,7 +270,7 @@ def displayVerse():
         
 verses = loadBible()
 
-app = App(title="Hello world!", layout="grid",
+app = App(title="pyBibleVerses", layout="grid",
           width=800, height=400, bg=(0,0,20))
 
 #Add Widgets
@@ -355,22 +328,13 @@ txtTop = Text(app, text=APPEND_STRING,align="left",
               grid=[0,2], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
-txt1 = Text(app, text="1", align="left", grid=[0,3],
-            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
-txt2 = Text(app, text="2", align="left", grid=[0,4],
-            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
-txt3 = Text(app, text="3", align="left", grid=[0,5],
-            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
-txt4 = Text(app, text="4", align="left", grid=[0,6],
-            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
-txt5 = Text(app, text="5", align="left", grid=[0,7],
-            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
-txt6 = Text(app, text="6", align="left", grid=[0,8],
+for txtNum in range(SCREEN_ROWS):
+    textItems['txt' + str(txtNum)] = Text(app, text=str(txtNum), align="left", grid=[0,3 + txtNum],
             font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 
 
 txtBottom = Text(app, text=APPEND_STRING,align="left",
-              grid=[0,9], font="Courier", width="fill",
+              grid=[0,3 + SCREEN_ROWS], font="Courier", width="fill",
               size=BIBLE_FONT_SIZE, color="white")
 
 app.full_screen=True
