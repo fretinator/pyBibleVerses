@@ -12,8 +12,9 @@ ICON_PREV = './prev.png'
 ICON_REWIND = './rewind.png'
 ICON_WIDTH = 48
 ICON_BG="white"
-SCREEN_ROWS = 4
-SCREEN_COLS = 40
+SCREEN_ROWS = 6
+SCREEN_COLS = 28
+BIBLE_FONT_SIZE=32 
 TIME_SECOND = 1000 # 1000 ms = 1 s
 TRUNC_CHARS = "..."
 APPEND_STRING = '*' * SCREEN_COLS
@@ -32,8 +33,10 @@ txt1 = Text
 txt2 = Text
 txt3 = Text
 txt4 = Text
+txt5 = Text
+txt6 = Text
 app = App
-versesDelay = 5 * TIME_SECOND
+versesDelay = 8 * TIME_SECOND
 
 def goFaster():
     global TIME_SECOND, versesDelay
@@ -117,10 +120,6 @@ def fastForward():
     
     paused = lastPaused
 
-def refresh():
-    global app
-    #app.update()
-
 def doQuit():
     global paused
     global app
@@ -139,11 +138,6 @@ def exitApp():
 
     print('We are outta here!')
     
-    try:
-        app.cancel(displayVerse);
-    except:
-        print("Error canceling displayVerse in exitApp")
-        
     try:
         app.destroy()
     except:
@@ -168,15 +162,15 @@ def loadBible():
 def resetScreen():
     global txt1,txt2,txt3,txt4
  
-    txt1.value = ''; 
-    txt2.value = '';
-    txt3.value = '';
-    txt4.value = '';
-
-    refresh()
+    txt1.value = '' 
+    txt2.value = ''
+    txt3.value = ''
+    txt4.value = ''
+    txt5.value = ''
+    txt6.value = ''
     
 def printScreen(line, reset):
-    global txt1,txt2,txt3,txt4 
+    global txt1,txt2,txt3,txt4,txt5,txt6 
 
     print('Printing to line ' +
           str(curLine) +
@@ -187,21 +181,25 @@ def printScreen(line, reset):
         resetScreen()
     
     if curLine == 1:
-        txt1.value = line;
+        txt1.value = line
     
     
     if curLine == 2:
-        txt2.value = line;
+        txt2.value = line
    
     
     if curLine == 3:
-        txt3.value = line;
+        txt3.value = line
 
     
     if curLine == 4:
-        txt4.value = line;
+        txt4.value = line
 
-    refresh()
+    if curLine == 5:
+        txt5.value = line
+    
+    if curLine == 6:
+        txt6.value = line
     
 def getNextChunkPos(verse, max_chars, truncate):
     global lastPos
@@ -333,8 +331,9 @@ fasterButton = PushButton(myBox, text="Faster",grid=[8,0],
 pad2 = Text(myBox, text="  ", grid=[9,0])
 
 # Show what verse is next
-txtNextVerse = Text(myBox, text="Next Verse", width="fill", align="left",
-                    grid=[10,0])
+txtNextVerse = Text(myBox, size =16, text="Next Verse", 
+	color="white", width="fill", align="left",
+	grid=[10,0])
 
 rewindButton.bg=ICON_BG
 prevButton.bg=ICON_BG
@@ -344,35 +343,38 @@ ffButton.bg=ICON_BG
 quitButton.bg=ICON_BG
 slowerButton.text_color = "white"
 fasterButton.text_color = "white"
-txtNextVerse.text_color="green"
 
 
 
 # 2. Now add text area to display verse
 txtEmpty = Text(app, text=SPACE_STRING,align="left",
               grid=[0,1], font="Courier", width="fill",
-              size=24, color="white")
+              size=BIBLE_FONT_SIZE, color="white")
 
 txtTop = Text(app, text=APPEND_STRING,align="left",
               grid=[0,2], font="Courier", width="fill",
-              size=24, color="white")
+              size=BIBLE_FONT_SIZE, color="white")
 
 txt1 = Text(app, text="1", align="left", grid=[0,3],
-            font="Courier", width="fill", size=24, color="white")
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 txt2 = Text(app, text="2", align="left", grid=[0,4],
-            font="Courier", width="fill", size=24, color="white")
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 txt3 = Text(app, text="3", align="left", grid=[0,5],
-            font="Courier", width="fill", size=24, color="white")
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
 txt4 = Text(app, text="4", align="left", grid=[0,6],
-            font="Courier", width="fill", size=24, color="white")
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
+txt5 = Text(app, text="5", align="left", grid=[0,7],
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
+txt6 = Text(app, text="6", align="left", grid=[0,8],
+            font="Courier", width="fill", size=BIBLE_FONT_SIZE, color="white")
+
 
 txtBottom = Text(app, text=APPEND_STRING,align="left",
-              grid=[0,7], font="Courier", width="fill",
-              size=24, color="white")
+              grid=[0,9], font="Courier", width="fill",
+              size=BIBLE_FONT_SIZE, color="white")
 
 app.full_screen=True
 
-#welcome_message = Text(app, text="Welcome to my app", size=40, font="Times New Roman", color="lightblue")
 pauseButton.after(20, displayVerse)
 
 
