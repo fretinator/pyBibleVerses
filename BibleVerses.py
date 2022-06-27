@@ -8,8 +8,8 @@ book_map['LEV'] = 'Leviticus'
 book_map['NUM'] = 'Numbers'
 book_map['DEU'] = 'Deuteronomy'
 book_map['JOS'] = 'Joshua'
-book_map['Judges'] = 'JUD'
-book_map['Ruth'] = 'RUT'
+book_map['JUD'] = 'Judges'
+book_map['RUT'] = 'Ruth'
 book_map['1SA'] = '1 Samuel'
 book_map['2SA'] = '2 Samuel'
 book_map['1KI'] = '1 Kings'
@@ -28,6 +28,7 @@ book_map['IS'] = 'Isaiah'
 book_map['JER'] = 'Jeremiah'
 book_map['LAM'] = 'Lamentations'
 book_map['EZK'] = 'Ezekiel'
+book_map['DAN'] = 'Daniel'
 book_map['HOS'] = 'Hosea'
 book_map['JOL'] = 'Joel'
 book_map['AMS'] = 'Amos'
@@ -110,7 +111,11 @@ def get_book_Name(verse):
     pos = verse.find(' ')
     if pos > 0:
         book = verse[0:pos]
-        long_book = book_map[book]
+
+        try:
+            long_book = book_map[book]
+        except KeyError:
+            return book
 
         if len(long_book) > 0:
             return long_book
